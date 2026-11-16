@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Add Product - Supreme Mathematics Society</title>
+<style>
+  body { font-family: Georgia, serif; background: #1a120b; color: #e8d5b0; padding: 20px; max-width: 600px; margin: 0 auto; }
+  h1 { color: #d4a017; text-align: center; }
+  label { display: block; margin: 15px 0 5px; color: #d4a017; font-weight: bold; }
+  input, select, textarea { width: 100%; padding: 12px; border: 1px solid #d4a017; border-radius: 8px; background: #2a1e12; color: #e8d5b0; font-size: 16px; box-sizing: border-box; }
+  button { width: 100%; padding: 15px; margin-top: 20px; background: #d4a017; color: #000; border: none; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
+  button:hover { background: #e8b82a; }
+  #preview { margin-top: 20px; padding: 15px; background: #2a1e12; border-radius: 8px; border: 1px solid #d4a017; }
+  #preview img { max-width: 100%; border-radius: 8px; }
+  #output { margin-top: 20px; }
+  #output textarea { height: 200px; font-family: monospace; font-size: 12px; }
+  .note { background: #2a1e12; padding: 15px; border-radius: 8px; margin-top: 20px; font-size: 14px; line-height: 1.6; }
+</style>
+</head>
+<body>
+<h1>Add New Product</h1>
+
+<label>Product Name</label>
+<input type="text" id="name" placeholder="e.g. Champion Hoodie 4">
+
+<label>Description</label>
+<input type="text" id="desc" placeholder="e.g. Heavyweight Hoodie">
+
+<label>Price (numbers only)</label>
+<input type="text" id="price" placeholder="e.g. 105.00">
+
+<label>Square Link</label>
+<input type="text" id="square" placeholder="https://square.link/u/...">
+
+<label>Category</label>
+<select id="category">
+  <option value="outfits">Outfits</option>
+  <option value="tops-tshirts">Tops → T-Shirts</option>
+  <option value="tops-hoodies">Tops → Hoodies</option>
+  <option value="tops-jackets">Tops → Jackets</option>
+  <option value="tops-hats">Tops → Hats</option>
+  <option value="bottoms">Bottoms</option>
+  <option value="bags">Bags</option>
+  <option value="accessories">Accessories</option>
+  <option value="jewelry">Accessories → Jewelry</option>
+  <option value="membersonly">Members Only</option>
+</select>
+
+<label>Product Image</label>
+<input type="file" id="image" accept="image/*">
+<div id="preview"></div>
+
+<button onclick="generateCode()">Generate Product Code</button>
+
+<div id="output" style="display:none;">
+  <label>Copy this and send it to Knowledge:</label>
+  <textarea id="code" readonly></textarea>
+  <button onclick="copyCode()">Copy to Clipboard</button>
+</div>
+
+<div class="note">
+  <strong>How to use:</strong><br>
+  1. Fill in all fields above<br>
+  2. Pick your product image<br>
+  3. Tap "Generate Product Code"<br>
+  4. Copy the code and send it to Knowledge in chat<br>
+  5. He'll add it to the website for you
+</div>
+
+<script>
+let imageData = '';
+document.getElementById('image').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      imageData = e.target.result;
+      document.getElementById('preview').innerHTML = '<img src="' + imageData + '">';
+    };
+    reader.readAsDataURL(file);
+  }
+});
+
+function generateCode() {
+  const name = document.getElementById('name').value;
+  const desc = document.getElementById('desc').value;
+  const price = document.getElementById('price').value;
+  const square = document.getElementById('square').value;
+  const category = document.getElementById('category').value;
+  
+  if (!name || !price || !square) {
+    alert('Please fill in name, price, and Square link');
+    return;
+  }
+  
+  const code = `NEW PRODUCT:
+Name: ${name}
+Description: ${desc}
+Price: $${price}
+Square: ${square}
+Category: ${category}
+Image: [attached - save this image]`;
+  
+  document.getElementById('code').value = code;
+  document.getElementById('output').style.display = 'block';
+}
+
+function copyCode() {
+  const el = document.getElementById('code');
+  el.select();
+  document.execCommand('copy');
+  alert('Copied! Send this to Knowledge in chat along with your image.');
+}
+</script>
+</body>
+</html>
